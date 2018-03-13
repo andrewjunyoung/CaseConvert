@@ -1,6 +1,6 @@
 [![Release](0.1.0)]()
 
-CaseComplete: Instant Case Conversion
+CaseComplete: Instant case conversion
 =================================
 Makes switching between commonly used cases used in programming painless and
 fast.
@@ -23,15 +23,18 @@ Every case is simplified to a capitalization convention, and a delimiter. For
 the sake of brevity for the user and easy entry for programmers not familiar
 with jargon, we simplify naming of conventions into
 
-`<caps_convention> <delim>`
+`<caps_convention><delim>`
 
-For example, snake\_case is better represented by the name
+For example, snake\_case is better represented by the name indicating that the
+first and all later words begin with a lower case letter, delimited by \_.
 
-lower\_
+xx\_
 
-UpperCamelCase is better represented by the name
+lowerCamelCase is better represented by the name indicating that the first word
+begins with a lower case character, and all later words begin with an upper
+case character, with no delimeter.
 
-upper
+xX
 
 The rules are better summarized below:
 
@@ -66,25 +69,23 @@ following form, where src is the short name for your start case, and dst is the
 short name for the case you want your text to be converted to:
 
 ```
-:conv <src> <dst> <global>
+:Conv <src> <dst>
 ```
 
-The global status is 'g' if you want to convert throughout the visual selection
-(or the whole documnent, if nothing is selected), and empty otherwise.
 For example, to convert from camelCase into snake\_case, type:
 
 ```
-:conv xX x_x g
+:Conv xX xx_
 ```
 
 To convert the whole document, as long as you are not inside a visual
 block, the above command will still work.
 
-To convert either on a case-by-case basis, remove the 'g' at the end of the
-above functions, as in:
+To convert the entire file rather than on a case-by-case basis, add a '!', thus
+calling the function via `:Conv! <src> <dst>`. For example,
 
 ```
-:conv xX x_x
+:Conv! xX x_x
 ```
 
 Note that this plugin makes no distinction between text and code, so any
