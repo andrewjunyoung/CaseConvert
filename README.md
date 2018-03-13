@@ -1,11 +1,14 @@
 [![Release](0.1.0)]()
 
 CaseComplete: Instant case conversion
-=================================
+=====================================
+
+Current Version: 0.1.1
+
 Makes switching between commonly used cases used in programming painless and
 fast.
 
-By build 1.0.0 aims to support two-way conversion between the following cases:
+By v1.0.0 aims to support two-way conversion between the following cases:
 * camelCase
 * UpperCamelCase
 * UPPER\_SNAKE\_CASE
@@ -13,6 +16,8 @@ By build 1.0.0 aims to support two-way conversion between the following cases:
 * Mixed\_Case\_Underscores
 * Mixed-Case-Hyphens
 * kebab-case
+
+and one way conversion between the above and
 * compoundwords
 * ALLCAPS
 
