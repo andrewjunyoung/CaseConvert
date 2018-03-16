@@ -93,8 +93,7 @@ function! Case(line1, line2, no_prompt, from, to)
   endif
 
   " Execute the command
-  :execute ":%s/" . replace . "/" . replace . "/g"
-  "exe a:line1 . "," . a:line2 . "s#" . replace . "#" . replace . "#" . modifiers
+  :execute a:line1 . "," . a:line2 . "s/" . replace . "/" . replace . "/g"
 
 endfunction
 
