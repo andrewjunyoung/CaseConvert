@@ -15,51 +15,52 @@ function! Case(line1, line2, no_prompt, from, to)
     let modifiers = "gec"
   endif
 
+
   " A giant if statement. TODO clean up by splitting up parsing into two
   " sections.
   " Upper followed by >=0 lowerchars ++ delim ++ Upper
   if a:from == "XX"
-    let replace = '\(\<\u\l\+\|\l\+\)\(\u\)'
+    let query = '\v(<\u)(\l*)_(\u)(.*)'
   elseif a:from == "XX_"
-    let replace = '\(\<\u\l\+\|\l\+\)\@<=_\(\u\)'
+    let query = '\v(<\u)((\l|_)*)_(\u)(.*)'
   elseif a:from == "XX-"
-    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\u\)'
+    let query = '\v(<\u)((\l|-)*)-(\u)(.*)'
 
   elseif a:from == "xX"
-    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\u\)'
+    let query = '\v(<\l)\l*)_(\u)(.*)'
   elseif a:from == "xX_"
-    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\u\)'
+    let query = '\v(<\l)((\l|_)*)_(\u)(.*)'
   elseif a:from == "xX-"
-    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\u\)'
+    let query = '\v(<\l)((\l|-)*)-(\u)(.*)'
 
   elseif a:from == "Xx"
-    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\l\)'
+    let query = '\v(<\u)(\l*)_(\l)(.*)'
   elseif a:from == "Xx_"
-    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\l\)'
+    let query = '\v(<\u)((\l|_)*)_(\l)(.*)'
   elseif a:from == "Xx-"
-    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\l\)'
+    let query = '\v(<\u)((\l|-)*)-(\l)(.*)'
 
   " We cannot bijectively map "X" as we don't know where word boundaries are.
   elseif a:from == "X_"
-    let replace = '\(\<\u\+\|\u\+\)\@<=-\(\u\)'
+    let query = '\v(<\u)((\u|_)*)_(\u)(.*)'
   elseif a:from == "X-"
-    let replace = '\(\<\u\+\|\u\+\)\@<=-\(\u\)'
+    let query = '\v(<\u)((\u|-)*)-(\u)(.*)'
 
   " We cannot bijectively map "x" as we don't know where word boundaries are.
   elseif a:from == "x_" || a:from == "xx_"
-    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\l\)'
+    let query = '\v(<\l)((\l|_)*)_(\l)(.*)'
   elseif a:from == "x-" || a:from == "xx-"
-    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\l\)'
+    let query = '\v(<\l)((\l|-)*)-(\l)(.*)'
   endif
 
   " Another giant if. TODO: Split this up into cases.
   " Upper followed by >=0 lowerchars ++ delim ++ Upper
   if a:to == "XX"
-    let replace = '\u\1\u\2'
+    let replace = '\u\1\2\u\3\4'
   elseif a:to == "XX_"
-    let replace = '\v\u\1@<=_\u\2'
+    let replace = '\u\1\2_\u\3\4'
   elseif a:to == "XX-"
-    let replace = '\v\u\1@<=-\u\2'
+    let replace = '\u\1\2-\u\3\4'
 
   elseif a:to == "xX"
     let replace = '\u\2'
@@ -91,7 +92,7 @@ function! Case(line1, line2, no_prompt, from, to)
   endif
 
   " Execute the command
-  :execute "'<,'>" . "s/" . replace . "/" . replace . "/g"
+  :execute "'<,'>" . "s/" . query . "/" . replace . "/g"
 
 endfunction
 
