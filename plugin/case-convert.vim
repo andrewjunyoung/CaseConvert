@@ -19,39 +19,37 @@ function! Case(line1, line2, no_prompt, from, to)
   " sections.
   " Upper followed by >=0 lowerchars ++ delim ++ Upper
   if a:from == "XX"
-    let replace = '\(\u\l*\)\(\u\)'
+    let replace = '\(\<\u\l\+\|\l\+\)\(\u\)'
   elseif a:from == "XX_"
-    let replace = '\(\u\l*\)\@<=_\(\u\)'
+    let replace = '\(\<\u\l\+\|\l\+\)\@<=_\(\u\)'
   elseif a:from == "XX-"
-    let replace = '\(\u\l*\)\@<=-\(\u\)'
+    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\u\)'
 
   elseif a:from == "xX"
-    let replace = '\(\<\l\+\|\l*\)\(\u\)'
+    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\u\)'
   elseif a:from == "xX_"
-    let replace = '\(\<\l\+\|\l*\)@<=_\(\u\)'
+    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\u\)'
   elseif a:from == "xX-"
-    let replace = '\(\<\l\+\|\l*\)@<=-\(\u\)'
+    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\u\)'
 
   elseif a:from == "Xx"
-    let replace = '\(\<\u\l*\|\l*\)\(\l\)'
+    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\l\)'
   elseif a:from == "Xx_"
-    let replace = '\(\<\u\l*\|\l*\)@<=_\(\l\)'
+    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\l\)'
   elseif a:from == "Xx-"
-    let replace = '\(\<\u\l*\|\l*\)@<=-\(\l\)'
+    let replace = '\(\<\u\l\+\|\l\+\)\@<=-\(\l\)'
 
-  elseif a:from == "X"
-    let replace = '\(\<\u\+)\(\u\)'
+  " We cannot bijectively map "X" as we don't know where word boundaries are.
   elseif a:from == "X_"
-    let replace = '\(\<\u\+)@<=_\(\u\)'
+    let replace = '\(\<\u\+\|\u\+\)\@<=-\(\u\)'
   elseif a:from == "X-"
-    let replace = '\(\<\u\+)@<=-\(\u\)'
+    let replace = '\(\<\u\+\|\u\+\)\@<=-\(\u\)'
 
-  elseif a:from == "x" || a:from == "xx"
-    let replace = '\(\<\l\+)\(\l\)'
+  " We cannot bijectively map "x" as we don't know where word boundaries are.
   elseif a:from == "x_" || a:from == "xx_"
-    let replace = '\(\<\l\+)@<=_\(\l\)'
+    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\l\)'
   elseif a:from == "x-" || a:from == "xx-"
-    let replace = '\(\<\l\+)@<=-\(\l\)'
+    let replace = '\(\<\l\+\|\l\+\)\@<=-\(\l\)'
   endif
 
   " Another giant if. TODO: Split this up into cases.
@@ -59,41 +57,41 @@ function! Case(line1, line2, no_prompt, from, to)
   if a:to == "XX"
     let replace = '\u\1\u\2'
   elseif a:to == "XX_"
-    let replace =  '\u\1\@<=_\u\2'
+    let replace = '\v\u\1@<=_\u\2'
   elseif a:to == "XX-"
-    let replace =  '\u\1\@<=-\u\2'
+    let replace = '\v\u\1@<=-\u\2'
 
   elseif a:to == "xX"
-    let replace = '\l\1\u\2'
+    let replace = '\u\2'
   elseif a:to == "xX_"
-    let replace =  '\l\1\@<=_\u\2'
+    let replace = '_\u\2'
   elseif a:to == "xX-"
-    let replace =  '\l\1\@<=-\u\2'
+    let replace = '\l\1\-\u\2'
 
   elseif a:to == "Xx"
     let replace = '\u\1\l\2'
   elseif a:to == "Xx_"
-    let replace =  '\u\1\@<=_\l\2'
+    let replace = '\u\1\_\l\2'
   elseif a:to == "Xx-"
-    let replace =  '\u\1\@<=-\l\2'
+    let replace = '\u\1\-\l\2'
 
   elseif a:to == "X"
     let replace = '\U\1\U\2'
   elseif a:to == "X_"
-    let replace =  '\U\1\@<=_\U\2'
+    let replace = '\U\1\_\U\2'
   elseif a:to == "X-"
-    let replace =  '\U\1\@<=-\U\2'
+    let replace = '\U\1\-\U\2'
 
   elseif a:to == "x" || a:to == "xx"
-    let replace =  '\l\1\l\2'
+    let replace = '\l\1\l\2'
   elseif a:to == "x_" || a:to == "xx_"
-    let replace =  '\l\1\l\2'
+    let replace = '\l\1_\l\2'
   elseif a:to == "x-" || a:to == "xx-"
-    let replace =  '\l\1\l\2'
+    let replace = '\l\1-\l\2'
   endif
 
   " Execute the command
-  :execute a:line1 . "," . a:line2 . "s/" . replace . "/" . replace . "/g"
+  :execute "'<,'>" . "s/" . replace . "/" . replace . "/g"
 
 endfunction
 
